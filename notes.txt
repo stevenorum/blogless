@@ -1,0 +1,17 @@
+I am wiring up a Lambda with the desired effect of sending it a GET request and getting back HTML so I can, you know, use it in a browser.
+
+This seems like an obvious thing to want to do, but The Great Google in the Sky is not finding anything very helpful.
+
+This is from January: https://kennbrodhagen.net/2016/01/31/how-to-return-html-from-aws-api-gateway-lambda/
+This seems Python-specific: http://stackoverflow.com/questions/33614198/return-html-from-aws-api-gateway
+
+Logically, looking at http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-output-format it seems that if I emitted { …  “headers”: { “Content-type”: “text/html” … }, “body”: “<HTML GOES HERE>”… } that should work; anyone want to head me off before I try it?
+
+Someone please tell me there’s a straightforward way to do this.
+
+
+
+
+I actually followed the exactly same demo “https://kennbrodhagen.net/2016/01/31/how-to-return-html-from-aws-api-gateway-lambda/” yesterday , most of the setup works. In addition to that, I had to use the way described here “http://stackoverflow.com/questions/31779868/get-aws-lambda-response-as-an-html-page” to get the double quote off.
+
+ 

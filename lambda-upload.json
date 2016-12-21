@@ -1,0 +1,16 @@
+{
+    "profile": "default",
+    "regions": ["us-east-1"],
+    "lambdas": [
+        {
+            "name":"blogless",
+            "runtime":"python2.7",
+            "role":"arn:aws:iam::190692641744:role/bloglessLambda",
+            "handler":"lambda_handler.lambda_handler",
+            "file":"lambda_handler.py",
+            "description":"Lambda function for blogless.",
+            "timeout":3,
+            "memory":128
+            }
+        ]
+    }
