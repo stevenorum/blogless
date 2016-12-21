@@ -1,0 +1,37 @@
+{
+   "AWSTemplateFormatVersion": "2010-09-09",
+   "Parameters" : {},
+   "Resources": {
+     "stuffses": {
+       "Type": "AWS::DynamoDB::Table",
+       "Properties": {
+         "TableName": "blog_posts",
+         "AttributeDefinitions": [
+           {
+             "AttributeName": "post_id",
+             "AttributeType": "S"
+           },
+           {
+             "AttributeName": "post_timestamp",
+             "AttributeType": "S"
+           }
+         ],
+         "KeySchema": [
+           {
+             "AttributeName": "post_id",
+             "KeyType": "HASH"
+           },
+           {
+             "AttributeName": "post_timestamp",
+             "KeyType": "RANGE"
+           }
+         ],
+         "ProvisionedThroughput": {
+           "ReadCapacityUnits": "1",
+           "WriteCapacityUnits": "1"
+         }
+       }
+     }
+   },
+   "Description": "DynamoDB table for blog post storage."
+ }

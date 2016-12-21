@@ -3,13 +3,33 @@
 import boto3
 import io
 import json
+import os
 import sys
 import zipfile
 
-def create_zip(filename):
+def zip_file(filename):
     file_like_object = io.BytesIO()
     zipf = zipfile.ZipFile(file_like_object, 'w', zipfile.ZIP_DEFLATED)
     zipf.write(filename)
+    zipf.close()
+    return file_like_object.getvalue()
+
+def zip_directory(dirname):
+    file_like_object = io.BytesIO()
+    zipf = zipfile.ZipFile(file_like_object, 'w', zipfile.ZIP_DEFLATED)
+    for root, dirs, files in os.walk(dirname):
+        arcpath = root
+        if arcpath.startswith(dirname):
+            arcpath = arcpath[len(dirname):]
+        if arcpath and arcpath[0] == "/":
+            arcpath = arcpath[1:]
+        for file in files:
+            fname = os.path.join(root, file)
+            arcname = os.path.join(arcpath, file)
+            print("-------------------")
+            print("FNAME:   " + fname)
+            print("ARCNAME: " + arcname)
+            zipf.write(fname, arcname)
     zipf.close()
     return file_like_object.getvalue()
 
@@ -21,7 +41,7 @@ default_config = {
             "name":"lambda_function",
             "runtime":"python2.7",
             "role":"",
-            "handler":"lambda_handler",
+            "handler":"lambda_handler.lambda_handler",
             "file":"lambda_handler.py",
             "description":"This is my lambda function!",
             "timeout":3,
@@ -45,7 +65,10 @@ for region in regions:
     lmbd = session.client("lambda")
     for function in lambdas:
         try:
-            zipfile = create_zip(function["file"])
+            if function.get("directory", None):
+                zipfile = zip_directory(function["directory"])
+            else:
+                zipfile = zip_file(function["file"])
             try:
                 f = lmbd.get_function(FunctionName=function["name"])
                 lmbd.update_function_code(
@@ -67,7 +90,7 @@ for region in regions:
                     )
         except Exception as e:
             print(e)
-            failed.add(region + "/" + function.get("name","<no name specified>"))
+            failed.append(region + "/" + function.get("name","<no name specified>"))
 
 if failed:
     print("The following region/function pairs failed:")

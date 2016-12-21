@@ -8,6 +8,7 @@
             "role":"arn:aws:iam::190692641744:role/bloglessLambda",
             "handler":"lambda_handler.lambda_handler",
             "file":"lambda_handler.py",
+            "directory":"lambda_handler",
             "description":"Lambda function for blogless.",
             "timeout":3,
             "memory":128
