@@ -79,7 +79,9 @@
             "Action": [
                 "dynamodb:Describe*",
                 "dynamodb:Get*",
-                "dynamodb:List*"
+                "dynamodb:List*",
+                "dynamodb:Query*",
+                "dynamodb:Scan"
             ],
             "Resource": "*"
         }

@@ -23,7 +23,7 @@ def landing_page(event, context):
 def view_post(event, context):
     event = event if type(event) == dict else json.loads(event)
     params = base_params.copy()
-    params["post"] = load_blogpost(event["identifier"])
+    params["post"] = load_blogpost(event["identifier"], fancy404=True)
     template = env.get_template('post.html')
     return template.render(**params)
 
@@ -38,19 +38,35 @@ def load_static(event, context):
     return content
 
 def load_blogposts():
-    response = posts_table.scan(
-    IndexName="post_timestamp_index",
-    Select="ALL_PROJECTED_ATTRIBUTES"
-    )
-    newest = BlogPost(id="2", title="Newest blog post",content="Some blog content goes here.\nAnd also here.",timestamp=datetime.datetime(2016,12,21,21,21))
-    oldest = BlogPost(id="1", title="Oldest blog post",content="Some blog content goes here.\nAnd also here.",timestamp=datetime.datetime(2016,12,1,1,1))
-    middle = BlogPost(id="0", title="Middle blog post",content="Some blog content goes here.\nAnd also here.",timestamp=datetime.datetime(2016,12,11,11,11), older=oldest, newer=newest)
-    newest.older = middle
-    oldest.newer = middle
-    return [newest, middle, oldest]
+    projection = "post_id, post_title, published, publish_timestamp"
+    response = posts_table.scan(ProjectionExpression=projection)
+    items = response["Items"]
+    lastKey = response.get("LastEvaluatedKey", None)
+    while lastKey:
+        response = posts_table.scan(ProjectionExpression=projection, ExclusiveStartKey=lastKey)
+        items += response["Items"]
+        lastKey = response.get("LastEvaluatedKey", None)
+    blogposts = [BlogPost.from_dynamo(e, ignore_failure=False) for e in items]
+    blogposts = [bp for bp in blogposts if bp.public]
+    blogposts.sort(key=lambda x: x.timestamp, reverse=True)
+    for i in range(len(blogposts)):
+        if (i-1) >= 0:
+            blogposts[i].newer = blogposts[i-1]
+        if (i+1) < len(blogposts):
+            blogposts[i].older = blogposts[i+1]
+    return blogposts
 
-def load_blogpost(id):
-    return {post.id:post for post in load_blogposts()}.get(id, None)
+def load_blogpost(id, fancy404=False):
+    item = posts_table.get_item(Key={"post_id":id}).get("Item",None)
+    if item:
+        bp = BlogPost.from_dynamo(item)
+        if bp.public:
+            return bp
+    if fancy404:
+        return BlogPost.not_found()
+    else:
+        return None
+
 
 static_cache = {}
 
