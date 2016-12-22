@@ -38,6 +38,10 @@ def load_static(event, context):
     return content
 
 def load_blogposts():
+    response = posts_table.scan(
+    IndexName="post_timestamp_index",
+    Select="ALL_PROJECTED_ATTRIBUTES"
+    )
     newest = BlogPost(id="2", title="Newest blog post",content="Some blog content goes here.\nAnd also here.",timestamp=datetime.datetime(2016,12,21,21,21))
     oldest = BlogPost(id="1", title="Oldest blog post",content="Some blog content goes here.\nAnd also here.",timestamp=datetime.datetime(2016,12,1,1,1))
     middle = BlogPost(id="0", title="Middle blog post",content="Some blog content goes here.\nAnd also here.",timestamp=datetime.datetime(2016,12,11,11,11), older=oldest, newer=newest)

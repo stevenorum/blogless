@@ -2,10 +2,10 @@
    "AWSTemplateFormatVersion": "2010-09-09",
    "Parameters" : {},
    "Resources": {
-     "stuffses": {
+     "posts": {
        "Type": "AWS::DynamoDB::Table",
        "Properties": {
-         "TableName": "blog_posts",
+         "TableName": "blogless_posts",
          "AttributeDefinitions": [
            {
              "AttributeName": "post_id",
@@ -29,7 +29,26 @@
          "ProvisionedThroughput": {
            "ReadCapacityUnits": "1",
            "WriteCapacityUnits": "1"
-         }
+         },
+         "GlobalSecondaryIndexes": [
+           {
+             "IndexName": "post_timestamp_index",
+             "KeySchema": [
+               {
+                 "AttributeName": "post_timestamp",
+                 "KeyType": "HASH"
+               }
+             ],
+             "Projection": {
+               "NonKeyAttributes" : ["published", "publish_timestamp", "post_title", "keywords"],
+	       "ProjectionType" : "INCLUDE"
+             },
+             "ProvisionedThroughput": {
+               "ReadCapacityUnits": "1",
+               "WriteCapacityUnits": "1"
+             }
+           }
+         ]
        }
      }
    },
