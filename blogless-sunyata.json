@@ -1,0 +1,88 @@
+{
+    "profile": "default",
+    "regions": "us-east-1",
+    "name":"Blogless",
+    "description":"Blogless stack.",
+    "stages": ["alpha"],
+    "lambdas": [
+        {
+            "name":"bloglessLanding",
+            "runtime":"python2.7",
+            "handler":"handlers.landing_page",
+            "directory":"blogless-zipdir",
+            "description":"blogless lambda function.",
+            "timeout":10,
+            "memory":256,
+            "role":"dynamoRead"
+        },
+        {
+            "name":"bloglessPost",
+            "runtime":"python2.7",
+            "handler":"handlers.view_post",
+            "directory":"blogless-zipdir",
+            "description":"blogless lambda function.",
+            "timeout":10,
+            "memory":256,
+            "role":"dynamoRead"
+        },
+        {
+            "name":"bloglessStatic",
+            "runtime":"python2.7",
+            "handler":"handlers.load_static",
+            "directory":"blogless-zipdir",
+            "description":"blogless lambda function.",
+            "timeout":10,
+            "memory":512,
+            "role":"dynamoRead"
+        }
+        ],
+    "paths": [
+        {
+            "path":"/",
+            "function":"bloglessLanding",
+            "extra":{"path":["/"]}
+        },
+        {
+            "path":"/posts",
+            "function":"bloglessPost",
+            "extra":{"path":["/posts"]},
+            "querystring_params":{"id":"identifier"}
+        },
+        {
+            "path":"/style.css",
+            "function":"bloglessStatic",
+            "extra":{"path":["/style.css"],"filename":"static/style.css"}
+        },
+        {
+            "path":"/index.html",
+            "function":"bloglessLanding",
+            "extra":{"path":["/index.html"]}
+        }
+    ],
+    "roles": {
+        "dynamoRead":[
+        {
+            "Effect": "Allow",
+            "Action": "logs:CreateLogGroup",
+            "Resource": { "Fn::Join" : [ ":", [ "arn:aws:logs",{"Ref" : "AWS::Region"},{ "Ref" : "AWS::AccountId" },"*" ] ] }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": { "Fn::Join" : [ ":", [ "arn:aws:logs",{"Ref" : "AWS::Region"},{ "Ref" : "AWS::AccountId" },"log-group:/aws/lambda/*" ] ] }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:Describe*",
+                "dynamodb:Get*",
+                "dynamodb:List*"
+            ],
+            "Resource": "*"
+        }
+    ]
+    }
+}

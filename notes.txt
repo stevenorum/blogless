@@ -8,3 +8,9 @@ http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-s
 
 https://kennbrodhagen.net/2016/01/31/how-to-return-html-from-aws-api-gateway-lambda/
 http://stackoverflow.com/questions/31779868/get-aws-lambda-response-as-an-html-page
+
+
+for each method:
+path (goes into the resource)
+querystrings
+handler

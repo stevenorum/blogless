@@ -1,7 +1,0 @@
-{% extends "base.html" %}
-{% block body %}
-<h2><a href="index.html">[back to stevenorum.com]</a></h2>
-<h2>{{post.day}}: {{post.title}} {% if post.newer %}<a href="posts?id={{post.newer.id}}">>>[newer post]</a>{% endif %} {% if post.older %}<a href="posts?id={{post.older.id}}">>>[ol\
-der post]</a>{% endif %}</h2>
-{{content}}
-{% endblock %}
