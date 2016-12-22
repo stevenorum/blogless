@@ -1,0 +1,8 @@
+author=Steve Norum
+title=Test Blogless Post
+timestamp=2016-12-22Z13:13
+published=yes
+-----content-----
+This is a test blog post for Blogless.
+    This should be on the second line and indented 4 spaces.
+This  should  be  back  at  the  normal  indentation  level  but  have  two  spaces  between  each  word.

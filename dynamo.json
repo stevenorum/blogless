@@ -20,10 +20,6 @@
            {
              "AttributeName": "post_id",
              "KeyType": "HASH"
-           },
-           {
-             "AttributeName": "post_timestamp",
-             "KeyType": "RANGE"
            }
          ],
          "ProvisionedThroughput": {
