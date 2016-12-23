@@ -1,0 +1,1 @@
+-Add deployment automation for the dynamo CF stack, either through some integration with sunyata or as a standalone script.
