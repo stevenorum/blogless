@@ -12,6 +12,37 @@ posts_table = ddb.Table("blogless_posts")
 
 env = Environment(loader=FileSystemLoader('templates'))
 
+def catchall(event, context):
+    event = event if type(event) == dict else json.loads(event)
+
+    path = event["path"]
+    path_params = event["pathParameters"]
+    resource = event["resource"]
+    qsp = event["queryStringParameters"]
+    method = event["httpMethod"]
+    request_body = event["body"]
+
+    content = "Path: {path}\nPath Params: {path_params}\nResource: {resource}\nQS Params: {qsp}\nHTTP Method: {method}\nRequest body: {request_body}".format(
+        path = path,
+        path_params = json.dumps(path_params, sort_keys=True),
+        resource = resource,
+        qsp = json.dumps(qsp, sort_keys=True),
+        method = method,
+        request_body = request_body if request_body else ""
+        )
+
+    params = base_params.copy()
+    params["landing_page"] = format_content(content)
+
+    template = env.get_template('index.html')
+    body = template.render(**params)
+
+    response = {}
+    response["statusCode"] = 200
+    response["body"] = body
+    response["headers"]  = {"Content-Type": "text/html"}
+    return response
+
 def landing_page(event, context):
     event = event if type(event) == dict else json.loads(event)
     params = base_params.copy()

@@ -34,29 +34,50 @@
             "timeout":10,
             "memory":512,
             "role":"dynamoRead"
+        },
+        {
+            "name":"bloglessCatchall",
+            "runtime":"python2.7",
+            "handler":"handlers.catchall",
+            "directory":"blogless-zipdir",
+            "description":"blogless lambda function.",
+            "timeout":10,
+            "memory":512,
+            "role":"dynamoRead",
+	    "proxy":true
         }
         ],
     "paths": [
         {
             "path":"/",
             "function":"bloglessLanding",
-            "extra":{"path":["/"]}
+            "extra":{"basepath":["/"]}
         },
         {
             "path":"/posts",
             "function":"bloglessPost",
-            "extra":{"path":["/posts"]},
+            "extra":{"basepath":["/posts"]},
             "querystring_params":{"id":"identifier"}
         },
         {
             "path":"/style.css",
             "function":"bloglessStatic",
-            "extra":{"path":["/style.css"],"filename":"static/style.css"}
+            "extra":{"basepath":["/style.css"],"filename":"static/style.css"}
         },
         {
             "path":"/index.html",
             "function":"bloglessLanding",
-            "extra":{"path":["/index.html"]}
+            "extra":{"basepath":["/index.html"]}
+        },
+        {
+            "path":"/proxyplus/{proxy+}",
+            "function":"bloglessCatchall",
+            "extra":{"basepath":["/proxyplus/"]}
+        },
+        {
+            "path":"/proxyplus",
+            "function":"bloglessCatchall",
+            "extra":{"basepath":["/proxyplus"]}
         }
     ],
     "roles": {

@@ -2,10 +2,12 @@
 {% block body %}
 {{landing_page}}
 
+{% if blogposts %}
 <h2>Blog posts</h2>
 <ul>
     {% for post in blogposts %}
     <li><a href="posts?id={{post.id}}">>>[{{post.day}}] {{post.title}}</a></li>
     {% endfor %}
 </ul>
+{% endif %}
 {% endblock %}
