@@ -8,7 +8,7 @@ environment_variables:
 phases:
   install:
     commands:
-      - pwd
+      - apt-get install zip
   pre_build:
     commands:
       - pip install jinja2 -t blogless/
@@ -18,11 +18,10 @@ phases:
       - ls
   post_build:
     commands:
-      - ls
-      - echo $PATH
-      - ls /bin
-      - ls /usr/bin
+      - cd blogless
+      - zip blogless.zip *
+      - cd ..
 artifacts:
   files:
-    - blogless/**/*
+    - blogless/blogless.zip
   discard-paths: yes
