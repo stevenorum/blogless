@@ -1,0 +1,26 @@
+version: 0.1
+
+environment_variables:
+  plaintext:
+    key: "value"
+    key2: "value2"
+
+phases:
+  install:
+    commands:
+      - pwd
+  pre_build:
+    commands:
+      - pip install jinja2 -t blogless/
+      - pip install setuptools -t blogless/
+  build:
+    commands:
+      - ls
+  post_build:
+    commands:
+      - cd blogless
+      - zip blogless.zip *
+artifacts:
+  files:
+    - blogless/blogless.zip
+  discard-paths: yes
