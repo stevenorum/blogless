@@ -18,14 +18,11 @@ phases:
       - ls
   post_build:
     commands:
-      - cd blogless
       - ls
       - echo $PATH
       - ls /bin
       - ls /usr/bin
-      - zip blogless.zip *
-      - cd ..
 artifacts:
   files:
-    - blogless/blogless.zip
+    - blogless/**/*
   discard-paths: yes
