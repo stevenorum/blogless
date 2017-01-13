@@ -8,7 +8,12 @@ environment_variables:
 phases:
   install:
     commands:
-      - ls
+      - ls /usr/local/bin | grep zip
+      - ls /usr/local/sbin | grep zip
+      - ls /usr/sbin | grep zip
+      - ls /usr/bin | grep zip
+      - ls /sbin | grep zip
+      - ls /bin | grep zip
   pre_build:
     commands:
       - mkdir /tmp/blogless
@@ -16,12 +21,14 @@ phases:
       - pip install setuptools -t /tmp/blogless/
   build:
     commands:
-      - cp -R blogless/* /tmp/blogless
+      - ls
   post_build:
     commands:
-      - cd /tmp/blogless
-      - zip blogless.zip *
+      - rm -rf *
+      - mv /tmp/blogless/* ./
+      - ls
+      - find *
 artifacts:
   files:
-    - /tmp/blogless/blogless.zip
-  discard-paths: yes
+    - **/*
+  discard-paths: no
