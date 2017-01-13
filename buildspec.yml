@@ -21,7 +21,7 @@ phases:
       - pip install setuptools -t /tmp/blogless/
   build:
     commands:
-      - ls
+      - mv blogless/* /tmp/blogless/
   post_build:
     commands:
       - rm -rf *
