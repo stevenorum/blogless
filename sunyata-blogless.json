@@ -1,5 +1,5 @@
 {
-    "profile": "default",
+    "profile": "norums",
     "regions": "us-east-1",
     "name":"Blogless",
     "description":"Blogless stack.",
