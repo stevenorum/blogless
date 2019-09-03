@@ -1,0 +1,12 @@
+{% set this_page = "index.html" if this_page is not defined else this_page %}
+{% extends "base.html.jinja" %}
+
+{% block body %}
+<div class="py-5 text-center">
+  <img class="d-block mx-auto mb-4" src="{{ static_base }}/static/{{ _site_name[0] }}.png" alt="" width="72" height="72">
+  <h2>Welcome to AstroNav Philly 2019!</h2>
+  <h3>(aka It's Always Starry in Philadelphia)</h3>
+  <p class="lead">Want see the existing courses?  <a href="{{base_path}}/courses/list">Click here.</a></p>
+  <p class="lead">Want to create a new course?  <a href="{{base_path}}/courses/create">Click here.</a></p>
+</div>
+{% endblock %}

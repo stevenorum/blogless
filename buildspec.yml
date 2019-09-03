@@ -1,0 +1,18 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - yum install -y python36-devel
+      - pip3 install --upgrade sneks
+      - sneks install-dependencies
+  pre_build:
+    commands:
+      - sneks setup-build-dir
+      - echo "$BUILD_PARAMS" > build/extra_params.json
+  build:
+    commands:
+      - sneks bundle-lambda
+artifacts:
+  files:
+    - NewSamTemplate.json
+  discard-paths: yes
